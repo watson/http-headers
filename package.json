@@ -1,0 +1,29 @@
+{
+  "name": "http-headers",
+  "version": "0.0.0",
+  "description": "Parse http headers",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/watson/http-headers.git"
+  },
+  "keywords": [
+    "http",
+    "https",
+    "header",
+    "headers",
+    "parse",
+    "parsing",
+    "ServerResponse",
+    "response"
+  ],
+  "author": "Thomas Watson Steen <w@tson.dk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/watson/http-headers/issues"
+  },
+  "homepage": "https://github.com/watson/http-headers"
+}
