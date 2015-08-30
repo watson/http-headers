@@ -4,14 +4,15 @@
   "description": "Parse http headers",
   "main": "index.js",
   "scripts": {
-    "test": "standard && node test.js"
+    "test": "standard && tape test.js"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/watson/http-headers.git"
   },
   "devDependencies": {
-    "standard": "^5.1.1"
+    "standard": "^5.1.1",
+    "tape": "^4.2.0"
   },
   "keywords": [
     "http",
