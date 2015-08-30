@@ -1,6 +1,6 @@
 {
   "name": "http-headers",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Parse http headers",
   "main": "index.js",
   "scripts": {
@@ -29,5 +29,9 @@
   "bugs": {
     "url": "https://github.com/watson/http-headers/issues"
   },
-  "homepage": "https://github.com/watson/http-headers"
+  "homepage": "https://github.com/watson/http-headers",
+  "coordinates": [
+    55.687573956701705,
+    12.595934558563272
+  ]
 }
