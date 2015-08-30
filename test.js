@@ -8,8 +8,10 @@ var startLineStr = 'HTTP/1.1 200 OK\r\n'
 var headersStr = 'Date: Tue, 10 Jun 2014 07:29:20 GMT\r\n' +
   'Connection: keep-alive\r\n' +
   'Transfer-Encoding: chunked\r\n' +
+  'X-List: A\r\n' +
   'X-Multi-Line-Header: Foo\r\n' +
   ' Bar\r\n' +
+  'X-List: B\r\n' +
   '\r\n'
 var fullResponseStr = startLineStr + headersStr + 'Hello: World'
 
@@ -17,6 +19,7 @@ var result = {
   date: 'Tue, 10 Jun 2014 07:29:20 GMT',
   connection: 'keep-alive',
   'transfer-encoding': 'chunked',
+  'x-list': 'A, B',
   'x-multi-line-header': 'Foo Bar'
 }
 

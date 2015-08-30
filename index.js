@@ -27,12 +27,18 @@ function parse (lines) {
     if (line[0] === ' ' || line[0] === '\t') {
       value += ' ' + line.trim()
     } else {
-      if (n) result[name] = value
+      if (n) addField(result, name, value)
       index = line.indexOf(':')
-      name = line.substr(0, index).toLowerCase()
+      name = line.substr(0, index)
       value = line.substr(index + 1).trim()
     }
   }
-  if (n) result[name] = value
+  if (n) addField(result, name, value)
   return result
+}
+
+function addField (headers, name, value) {
+  name = name.toLowerCase()
+  if (name in headers) headers[name] += ', ' + value
+  else headers[name] = value
 }
