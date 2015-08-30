@@ -1,6 +1,7 @@
 # http-headers
 
 [![Build Status](https://travis-ci.org/watson/http-headers.png)](https://travis-ci.org/watson/http-headers)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 HTTP header string parser.
 
@@ -45,12 +46,12 @@ npm install http-headers
 ## Usage
 
 ```javascript
-var httpHeaders = require('http-headers');
+var httpHeaders = require('http-headers')
 
 http.createServer(function (req, res) {
-  res.end('Hello World');
-  console.log('The headers sent to the client was:', httpHeaders(res));
-});
+  res.end('Hello World')
+  console.log('The headers sent to the client was:', httpHeaders(res))
+})
 ```
 
 ## License
