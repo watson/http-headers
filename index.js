@@ -1,6 +1,6 @@
 'use strict'
 
-var nl = /\r?\n/
+var nl = /\r\n|\n|\r/
 
 module.exports = function (str) {
   str = normalize(str)
