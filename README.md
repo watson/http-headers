@@ -3,7 +3,7 @@
 [![Build status](https://travis-ci.org/watson/http-headers.svg?branch=master)](https://travis-ci.org/watson/http-headers)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
-HTTP header string parser.
+Extract and parse headers from an HTTP request or reponse.
 
 Converts:
 
@@ -13,6 +13,7 @@ Date: Tue, 10 Jun 2014 07:19:27 GMT
 Connection: keep-alive
 Transfer-Encoding: chunked
 
+Hello World
 ```
 
 To this:
@@ -23,7 +24,47 @@ To this:
   'transfer-encoding': 'chunked' }
 ```
 
-## Why?
+## Installation
+
+```
+npm install http-headers
+```
+
+## Usage
+
+```js
+var net = require('net')
+var httpHeaders = require('http-headers')
+
+// create TCP server
+net.createServer(function (c) {
+  var buffers = []
+  c.on('data', buffers.push.bind(buffers))
+  c.on('end', function () {
+    var data = Buffer.concat(buffers)
+
+    // parse incoming data as an HTTP request and extra HTTP headers
+    console.log('Request headers:', httpHeaders(data))
+  })
+}).listen(8080)
+```
+
+### `http.ServerReponse` support
+
+If given an instance of `http.ServerResponse`, the reponse headers is
+automatically extracted, parsed and returned:
+
+```js
+var http = require('http')
+var httpHeaders = require('http-headers')
+
+http.createServer(function (req, res) {
+  res.end('Hello World')
+  console.log('Response headers:', httpHeaders(res))
+}).listen(8080)
+```
+
+#### Why?
 
 If you've ever needed to log or in another way access the headers sent
 to the client on a `http.ServerResponse` in Node.js, you know it's not
@@ -37,22 +78,16 @@ available as an object.
 
 This module makes the task super simple.
 
-## Installation
+## API
+
+The http-headers module exposes a single parser function:
 
 ```
-npm install http-headers
+httpHeaders([ string | buffer | http.ServerReponse ])
 ```
 
-## Usage
-
-```js
-var httpHeaders = require('http-headers')
-
-http.createServer(function (req, res) {
-  res.end('Hello World')
-  console.log('The headers sent to the client was:', httpHeaders(res))
-})
-```
+The module returns a JavaScript object with each element representing a
+parsed header. All header names are lowercased.
 
 ## License
 

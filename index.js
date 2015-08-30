@@ -20,7 +20,8 @@ function normalize (str) {
 
 function parse (headers) {
   var result = {}
-  headers.forEach(function (header) {
+  headers.some(function (header) {
+    if (!header) return true
     var index = header.indexOf(':')
     result[header.substr(0, index).toLowerCase()] = header.substr(index + 1).trim()
   })
