@@ -1,6 +1,6 @@
 # http-headers
 
-[![Build Status](https://travis-ci.org/watson/http-headers.png)](https://travis-ci.org/watson/http-headers)
+[![Build status](https://travis-ci.org/watson/http-headers.svg?branch=master)](https://travis-ci.org/watson/http-headers)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 HTTP header string parser.
@@ -17,7 +17,7 @@ Transfer-Encoding: chunked
 
 To this:
 
-```javascript
+```js
 { date: 'Tue, 10 Jun 2014 07:19:27 GMT',
   connection: 'keep-alive',
   'transfer-encoding': 'chunked' }
@@ -45,7 +45,7 @@ npm install http-headers
 
 ## Usage
 
-```javascript
+```js
 var httpHeaders = require('http-headers')
 
 http.createServer(function (req, res) {

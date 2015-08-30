@@ -23,7 +23,7 @@
     "ServerResponse",
     "response"
   ],
-  "author": "Thomas Watson Steen <w@tson.dk>",
+  "author": "Thomas Watson Steen <w@tson.dk> (https://twitter.com/wa7son)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/watson/http-headers/issues"
