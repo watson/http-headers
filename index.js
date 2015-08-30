@@ -18,12 +18,21 @@ function normalize (str) {
   return str.toString().trim()
 }
 
-function parse (headers) {
+function parse (lines) {
   var result = {}
-  headers.some(function (header) {
-    if (!header) return true
-    var index = header.indexOf(':')
-    result[header.substr(0, index).toLowerCase()] = header.substr(index + 1).trim()
-  })
+  var line, index, name, value
+  for (var n = 0, l = lines.length; n < l; n++) {
+    line = lines[n]
+    if (line === '') break // an empty line indicates end of header section
+    if (line[0] === ' ' || line[0] === '\t') {
+      value += ' ' + line.trim()
+    } else {
+      if (n) result[name] = value
+      index = line.indexOf(':')
+      name = line.substr(0, index).toLowerCase()
+      value = line.substr(index + 1).trim()
+    }
+  }
+  if (n) result[name] = value
   return result
 }
