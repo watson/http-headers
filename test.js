@@ -4,8 +4,9 @@ var test = require('tape')
 var http = require('http')
 var httpHeaders = require('./')
 
-var startLineStr = 'HTTP/1.1 200 OK\r\n'
-var headersStr = 'Date: Tue, 10 Jun 2014 07:29:20 GMT\r\n' +
+var requestLine = 'GET /foo HTTP/1.1\r\n'
+var statusLine = 'HTTP/1.1 200 OK\r\n'
+var msgHeaders = 'Date: Tue, 10 Jun 2014 07:29:20 GMT\r\n' +
   'Connection: keep-alive\r\n' +
   'Transfer-Encoding: chunked\r\n' +
   'X-List: A\r\n' +
@@ -13,7 +14,8 @@ var headersStr = 'Date: Tue, 10 Jun 2014 07:29:20 GMT\r\n' +
   ' Bar\r\n' +
   'X-List: B\r\n' +
   '\r\n'
-var fullResponseStr = startLineStr + headersStr + 'Hello: World'
+var requestMsg = requestLine + msgHeaders + 'Hello: World'
+var responseMsg = statusLine + msgHeaders + 'Hello: World'
 
 var result = {
   date: 'Tue, 10 Jun 2014 07:29:20 GMT',
@@ -38,23 +40,30 @@ test('empty object', function (t) {
   t.end()
 })
 
-test('buffer', function (t) {
-  t.deepEqual(httpHeaders(new Buffer(headersStr)), result)
+test('empty buffer', function (t) {
+  t.deepEqual(httpHeaders(new Buffer('')), {})
   t.end()
 })
 
 test('start-line + header', function (t) {
-  t.deepEqual(httpHeaders(startLineStr + headersStr), result)
+  t.deepEqual(httpHeaders(requestLine + msgHeaders), result)
+  t.deepEqual(httpHeaders(statusLine + msgHeaders), result)
+  t.deepEqual(httpHeaders(new Buffer(requestLine + msgHeaders)), result)
+  t.deepEqual(httpHeaders(new Buffer(statusLine + msgHeaders)), result)
   t.end()
 })
 
 test('headers only', function (t) {
-  t.deepEqual(httpHeaders(headersStr), result)
+  t.deepEqual(httpHeaders(msgHeaders), result)
+  t.deepEqual(httpHeaders(new Buffer(msgHeaders)), result)
   t.end()
 })
 
 test('full http response', function (t) {
-  t.deepEqual(httpHeaders(fullResponseStr), result)
+  t.deepEqual(httpHeaders(requestMsg), result)
+  t.deepEqual(httpHeaders(responseMsg), result)
+  t.deepEqual(httpHeaders(new Buffer(requestMsg)), result)
+  t.deepEqual(httpHeaders(new Buffer(responseMsg)), result)
   t.end()
 })
 
@@ -76,7 +85,7 @@ test('http.ServerResponse', function (t) {
   })
 
   t.test('normal _header property', function (t) {
-    t.deepEqual(httpHeaders({ _header: startLineStr + headersStr }), result)
+    t.deepEqual(httpHeaders({ _header: statusLine + msgHeaders }), result)
     t.end()
   })
 })
