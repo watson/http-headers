@@ -24,6 +24,16 @@ To this:
   'transfer-encoding': 'chunked' }
 ```
 
+**Features:**
+
+- Auto-detects and ignores HTTP start-line if present
+- Auto-detects and ignores body if present
+- Fully RFC 2068 compliant (please [open an
+  issue](https://github.com/watson/http-headers/issues) if you find a
+  discrepancy)
+- Support multi-line headers (lines will be joined with a space)
+- Support repeating headers (values will be joined with `, `)
+
 ## Installation
 
 ```
