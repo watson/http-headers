@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "next-line": "^1.0.0",
-    "strip-lines": "^1.0.0"
+    "strip-lines": "^1.0.1"
   },
   "devDependencies": {
     "standard": "^5.1.1",
