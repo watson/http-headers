@@ -6,7 +6,7 @@ var nextLine = require('next-line')
 // RFC-2068 Start-Line definitions:
 //   Request-Line: Method SP Request-URI SP HTTP-Version CRLF
 //   Status-Line:  HTTP-Version SP Status-Code SP Reason-Phrase CRLF
-var startLine = /^[A-Z]+(\/\d\.\d)? /
+var startLine = /^[A-Z_]+(\/\d\.\d)? /
 
 module.exports = function (str) {
   return parse(normalize(str))
