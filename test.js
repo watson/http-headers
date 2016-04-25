@@ -37,7 +37,7 @@ var responseResult = {
 }
 var requestResult = {
   method: 'GET',
-  path: '/foo',
+  url: '/foo',
   version: { major: 1, minor: 1 },
   headers: headerResult
 }

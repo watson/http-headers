@@ -22,7 +22,7 @@ function parse (str, onlyHeaders) {
   } else if ((match = line.match(requestLine)) !== null) {
     return {
       method: match[1],
-      path: match[2],
+      url: match[2],
       version: { major: parseInt(match[3], 10), minor: parseInt(match[4], 10) },
       headers: parseHeaders(str)
     }
