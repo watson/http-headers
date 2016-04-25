@@ -37,7 +37,7 @@ To this:
 ## Installation
 
 ```
-npm install http-headers
+npm install http-headers --save
 ```
 
 ## Usage
