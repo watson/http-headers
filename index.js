@@ -1,30 +1,50 @@
 'use strict'
 
-var strip = require('strip-lines')
 var nextLine = require('next-line')
 
 // RFC-2068 Start-Line definitions:
 //   Request-Line: Method SP Request-URI SP HTTP-Version CRLF
 //   Status-Line:  HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 var startLine = /^[A-Z_]+(\/\d\.\d)? /
+var requestLine = /^([A-Z_]+) (.+) [A-Z]+\/(\d)\.(\d)$/
+var statusLine = /^[A-Z]+\/(\d)\.(\d) (\d{3}) (.*)$/
 
-module.exports = function (str) {
-  return parse(normalize(str))
+module.exports = function (data, onlyHeaders) {
+  return parse(normalize(data), onlyHeaders)
 }
 
-function normalize (str) {
-  if (str && str._header) str = str._header // extra headers from http.ServerResponse object
-  if (!str || typeof str.toString !== 'function') return ''
-  str = str.toString().trim()
-  if (startLine.test(str)) str = strip(str, 1)
-  return str
+function parse (str, onlyHeaders) {
+  var line = firstLine(str)
+  var match
+
+  if (onlyHeaders && startLine.test(line)) {
+    return parseHeaders(str)
+  } else if ((match = line.match(requestLine)) !== null) {
+    return {
+      method: match[1],
+      path: match[2],
+      version: { major: parseInt(match[3], 10), minor: parseInt(match[4], 10) },
+      headers: parseHeaders(str)
+    }
+  } else if ((match = line.match(statusLine)) !== null) {
+    return {
+      version: { major: parseInt(match[1], 10), minor: parseInt(match[2], 10) },
+      statusCode: parseInt(match[3], 10),
+      statusMessage: match[4],
+      headers: parseHeaders(str)
+    }
+  } else {
+    return parseHeaders(str)
+  }
 }
 
-function parse (str) {
+function parseHeaders (str) {
   var headers = {}
   var next = nextLine(str)
   var line = next()
   var index, name, value
+
+  if (startLine.test(line)) line = next()
 
   while (line) {
     // subsequent lines in multi-line headers start with whitespace
@@ -46,6 +66,16 @@ function parse (str) {
   if (name) addHeaderLine(name, value, headers)
 
   return headers
+}
+
+function normalize (str) {
+  if (str && str._header) str = str._header // extra headers from http.ServerResponse object
+  if (!str || typeof str.toString !== 'function') return ''
+  return str.toString().trim()
+}
+
+function firstLine (str) {
+  return str.slice(0, str.indexOf('\r\n'))
 }
 
 // The following function is lifted from:

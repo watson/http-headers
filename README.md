@@ -3,7 +3,7 @@
 [![Build status](https://travis-ci.org/watson/http-headers.svg?branch=master)](https://travis-ci.org/watson/http-headers)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
-Extract and parse headers from an HTTP request or reponse.
+Parse the start-line and headers from an HTTP request or reponse.
 
 Converts:
 
@@ -19,20 +19,26 @@ Hello World
 To this:
 
 ```js
-{ date: 'Tue, 10 Jun 2014 07:19:27 GMT',
-  connection: 'keep-alive',
-  'transfer-encoding': 'chunked' }
+{
+  version: { major: 1, minor: 1 },
+  statusCode: 200,
+  statusMessage: 'OK',
+  headers: {
+    date: 'Tue, 10 Jun 2014 07:19:27 GMT',
+    connection: 'keep-alive',
+    'transfer-Encoding': 'chunked'
+  }
+}
 ```
 
 **Features:**
 
-- Auto-detects and ignores HTTP start-line if present
 - Auto-detects and ignores body if present
 - Fully [RFC 2068](http://www.rfc-base.org/txt/rfc-2068.txt) compliant
   (please [open an issue](https://github.com/watson/http-headers/issues)
   if you find a discrepancy)
 - Support multi-line headers (lines will be joined with a space)
-- Support repeating headers (values will be joined with `, `)
+- Support repeating headers
 
 ## Installation
 
@@ -54,7 +60,7 @@ net.createServer(function (c) {
     var data = Buffer.concat(buffers)
 
     // parse incoming data as an HTTP request and extra HTTP headers
-    console.log('Request headers:', httpHeaders(data))
+    console.log(httpHeaders(data))
   })
 }).listen(8080)
 ```
@@ -70,7 +76,7 @@ var httpHeaders = require('http-headers')
 
 http.createServer(function (req, res) {
   res.end('Hello World')
-  console.log('Response headers:', httpHeaders(res))
+  console.log(httpHeaders(res))
 }).listen(8080)
 ```
 
@@ -92,12 +98,107 @@ This module makes the task super simple.
 
 The http-headers module exposes a single parser function:
 
-```
-httpHeaders([ string | buffer | http.ServerReponse ])
+```js
+httpHeaders(data[, onlyHeaders])
 ```
 
-The module returns a JavaScript object with each element representing a
-parsed header. All header names are lowercased.
+Arguments:
+
+- `data` - A string, buffer or instance of `http.ServerReponse`
+- `onlyHeaders` - An optional boolean. If `true`, only the headers
+  object will be returned. Defaults to `false`
+
+### Request example
+
+If given a request as input:
+
+```http
+GET /foo HTTP/1.1
+Date: Tue, 10 Jun 2014 07:19:27 GMT
+Connection: keep-alive
+Transfer-Encoding: chunked
+
+Hello World
+```
+
+Returns:
+
+```js
+{
+  method: 'GET',
+  path: '/foo',
+  version: { major: 1, minor: 1 },
+  headers: {
+    date: 'Tue, 10 Jun 2014 07:19:27 GMT',
+    connection: 'keep-alive',
+    'transfer-Encoding': 'chunked'
+  }
+}
+```
+
+### Response example
+
+If given a request as input:
+
+```http
+HTTP/1.1 200 OK
+Date: Tue, 10 Jun 2014 07:19:27 GMT
+Connection: keep-alive
+Transfer-Encoding: chunked
+
+Hello World
+```
+
+Returns:
+
+```js
+{
+  version: { major: 1, minor: 1 },
+  statusCode: 200,
+  statusMessage: 'OK',
+  headers: {
+    date: 'Tue, 10 Jun 2014 07:19:27 GMT',
+    connection: 'keep-alive',
+    'transfer-Encoding': 'chunked'
+  }
+}
+```
+
+### `onlyHeaders` example
+
+If the optional second argument is set to `true`, only headers are
+returned no matter the type of input:
+
+```js
+{
+  date: 'Tue, 10 Jun 2014 07:19:27 GMT',
+  connection: 'keep-alive',
+  'transfer-Encoding': 'chunked'
+}
+```
+
+### No Start-Line
+
+If the `data` given does not contain an HTTP Start-Line, only the
+headers are returned, even if the `onlyHeaders` argument is `false`:
+
+```http
+Date: Tue, 10 Jun 2014 07:19:27 GMT
+Connection: keep-alive
+Transfer-Encoding: chunked
+
+Hello World
+```
+
+Returns:
+
+```js
+{
+  date: 'Tue, 10 Jun 2014 07:19:27 GMT',
+  connection: 'keep-alive',
+  'transfer-Encoding': 'chunked'
+}
+```
 
 ## License
 

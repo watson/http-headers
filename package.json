@@ -11,8 +11,7 @@
     "url": "git://github.com/watson/http-headers.git"
   },
   "dependencies": {
-    "next-line": "^1.0.0",
-    "strip-lines": "^1.0.1"
+    "next-line": "^1.0.0"
   },
   "devDependencies": {
     "standard": "^5.1.1",
