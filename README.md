@@ -7,7 +7,7 @@ Extract and parse headers from an HTTP request or reponse.
 
 Converts:
 
-```
+```http
 HTTP/1.1 200 OK
 Date: Tue, 10 Jun 2014 07:19:27 GMT
 Connection: keep-alive
