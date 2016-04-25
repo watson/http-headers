@@ -9,6 +9,9 @@ var statusLine = 'HTTP/1.1 200 OK\r\n'
 var msgHeaders = 'Date: Tue, 10 Jun 2014 07:29:20 GMT\r\n' +
   'Connection: keep-alive\r\n' +
   'Transfer-Encoding: chunked\r\n' +
+  'Age: foo\r\n' +
+  'Age: bar\r\n' +
+  'Set-Cookie: cookie\r\n' +
   'X-List: A\r\n' +
   'X-Multi-Line-Header: Foo\r\n' +
   ' Bar\r\n' +
@@ -21,6 +24,8 @@ var result = {
   date: 'Tue, 10 Jun 2014 07:29:20 GMT',
   connection: 'keep-alive',
   'transfer-encoding': 'chunked',
+  age: 'foo',
+  'set-cookie': ['cookie'],
   'x-list': 'A, B',
   'x-multi-line-header': 'Foo Bar'
 }
@@ -88,4 +93,10 @@ test('http.ServerResponse', function (t) {
     t.deepEqual(httpHeaders({ _header: statusLine + msgHeaders }), result)
     t.end()
   })
+})
+
+test('set-cookie', function (t) {
+  t.deepEqual(httpHeaders('Set-Cookie: foo'), { 'set-cookie': ['foo'] })
+  t.deepEqual(httpHeaders('Set-Cookie: foo\r\nSet-Cookie: bar'), { 'set-cookie': ['foo', 'bar'] })
+  t.end()
 })
