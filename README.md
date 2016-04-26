@@ -126,7 +126,7 @@ Returns:
 ```js
 {
   method: 'GET',
-  path: '/foo',
+  url: '/foo',
   version: { major: 1, minor: 1 },
   headers: {
     date: 'Tue, 10 Jun 2014 07:19:27 GMT',
