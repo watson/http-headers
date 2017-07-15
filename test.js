@@ -2,6 +2,7 @@
 
 var test = require('tape')
 var http = require('http')
+var Buffer = require('safe-buffer').Buffer
 var httpHeaders = require('./')
 
 var requestLine = 'GET /foo HTTP/1.1\r\n'
