@@ -14,8 +14,8 @@
     "next-line": "^1.1.0"
   },
   "devDependencies": {
-    "standard": "^5.1.1",
-    "tape": "^4.2.0"
+    "standard": "^10.0.2",
+    "tape": "^4.7.0"
   },
   "keywords": [
     "http",
