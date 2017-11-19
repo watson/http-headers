@@ -79,6 +79,36 @@ test('start-line + header', function (t) {
   t.end()
 })
 
+test('request-line only', function (t) {
+  var requestResult = {
+    method: 'GET',
+    url: '/foo',
+    version: { major: 1, minor: 1 },
+    headers: {}
+  }
+
+  t.deepEqual(httpHeaders(requestLine + '\r\n'), requestResult)
+  t.deepEqual(httpHeaders(new Buffer(requestLine + '\r\n')), requestResult)
+  t.deepEqual(httpHeaders(requestLine + '\r\n', true), {})
+  t.deepEqual(httpHeaders(new Buffer(requestLine + '\r\n'), true), {})
+  t.end()
+})
+
+test('status-line only', function (t) {
+  var responseResult = {
+    version: { major: 1, minor: 1 },
+    statusCode: 200,
+    statusMessage: 'OK',
+    headers: {}
+  }
+
+  t.deepEqual(httpHeaders(statusLine + '\r\n'), responseResult)
+  t.deepEqual(httpHeaders(new Buffer(statusLine + '\r\n')), responseResult)
+  t.deepEqual(httpHeaders(statusLine + '\r\n', true), {})
+  t.deepEqual(httpHeaders(new Buffer(statusLine + '\r\n'), true), {})
+  t.end()
+})
+
 test('headers only', function (t) {
   t.deepEqual(httpHeaders(msgHeaders), headerResult)
   t.deepEqual(httpHeaders(new Buffer(msgHeaders)), headerResult)

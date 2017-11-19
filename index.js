@@ -75,7 +75,9 @@ function normalize (str) {
 }
 
 function firstLine (str) {
-  return str.slice(0, str.indexOf('\r\n'))
+  var nl = str.indexOf('\r\n')
+  if (nl === -1) return str
+  else return str.slice(0, nl)
 }
 
 // The following function is lifted from:
