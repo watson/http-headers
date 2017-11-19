@@ -26,7 +26,7 @@ To this:
   headers: {
     date: 'Tue, 10 Jun 2014 07:19:27 GMT',
     connection: 'keep-alive',
-    'transfer-Encoding': 'chunked'
+    'transfer-encoding': 'chunked'
   }
 }
 ```
@@ -131,7 +131,7 @@ Returns:
   headers: {
     date: 'Tue, 10 Jun 2014 07:19:27 GMT',
     connection: 'keep-alive',
-    'transfer-Encoding': 'chunked'
+    'transfer-encoding': 'chunked'
   }
 }
 ```
@@ -159,7 +159,7 @@ Returns:
   headers: {
     date: 'Tue, 10 Jun 2014 07:19:27 GMT',
     connection: 'keep-alive',
-    'transfer-Encoding': 'chunked'
+    'transfer-encoding': 'chunked'
   }
 }
 ```
@@ -173,7 +173,7 @@ returned no matter the type of input:
 {
   date: 'Tue, 10 Jun 2014 07:19:27 GMT',
   connection: 'keep-alive',
-  'transfer-Encoding': 'chunked'
+  'transfer-encoding': 'chunked'
 }
 ```
 
@@ -196,7 +196,7 @@ Returns:
 {
   date: 'Tue, 10 Jun 2014 07:19:27 GMT',
   connection: 'keep-alive',
-  'transfer-Encoding': 'chunked'
+  'transfer-encoding': 'chunked'
 }
 ```
 
