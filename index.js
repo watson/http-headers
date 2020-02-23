@@ -7,7 +7,7 @@ var nextLine = require('next-line')
 //   Status-Line:  HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 var startLine = /^[A-Z_]+(\/\d\.\d)? /
 var requestLine = /^([A-Z_]+) (.+) [A-Z]+\/(\d)\.(\d)$/
-var statusLine = /^[A-Z]+\/(\d)\.(\d) (\d{3}) (.*)$/
+var statusLine = /^[A-Z]+\/(\d)\.(\d) (\d{3}) *(.*)$/
 
 module.exports = function (data, onlyHeaders) {
   return parse(normalize(data), onlyHeaders)
