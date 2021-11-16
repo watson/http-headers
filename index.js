@@ -5,7 +5,7 @@ var nextLine = require('next-line')
 // RFC-2068 Start-Line definitions:
 //   Request-Line: Method SP Request-URI SP HTTP-Version CRLF
 //   Status-Line:  HTTP-Version SP Status-Code SP Reason-Phrase CRLF
-var startLine = /^[A-Z_]+(\/\d)?/
+var startLine = /^[A-Z_]+[^:]*$/
 var requestLine = /^([A-Z_]+) (.+) HTTP\/([12](\.(\d))?)$/
 var statusLine = /^HTTP\/([12](\.(\d))?) (\d{3})\s?(.*)?$/
 
