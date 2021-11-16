@@ -7,6 +7,7 @@ var httpHeaders = require('./')
 
 var requestLine = 'GET /foo HTTP/1.1\r\n'
 var statusLine = 'HTTP/1.1 200 OK\r\n'
+var statusLineV2 = 'HTTP/2 200 \r\n'
 var msgHeaders = 'Date: Tue, 10 Jun 2014 07:29:20 GMT\r\n' +
   'Connection: keep-alive\r\n' +
   'Transfer-Encoding: chunked\r\n' +
@@ -20,6 +21,7 @@ var msgHeaders = 'Date: Tue, 10 Jun 2014 07:29:20 GMT\r\n' +
   '\r\n'
 var requestMsg = requestLine + msgHeaders + 'Hello: World'
 var responseMsg = statusLine + msgHeaders + 'Hello: World'
+var responseMsgV2 = statusLine + msgHeaders + 'Hello: World'
 
 var headerResult = {
   date: 'Tue, 10 Jun 2014 07:29:20 GMT',
@@ -31,15 +33,22 @@ var headerResult = {
   'x-multi-line-header': 'Foo Bar'
 }
 var responseResult = {
-  version: { major: 1, minor: 1 },
+  version: '1.1',
   statusCode: 200,
   statusMessage: 'OK',
   headers: headerResult
 }
+var responseResultV2 = {
+  version: '2',
+  statusCode: 200,
+  statusMessage: '',
+  headers: headerResult
+}
+
 var requestResult = {
   method: 'GET',
   url: '/foo',
-  version: { major: 1, minor: 1 },
+  version: '1.1',
   headers: headerResult
 }
 
@@ -70,11 +79,13 @@ test('empty buffer', function (t) {
 test('start-line + header', function (t) {
   t.deepEqual(httpHeaders(requestLine + msgHeaders), requestResult)
   t.deepEqual(httpHeaders(statusLine + msgHeaders), responseResult)
+  t.deepEqual(httpHeaders(statusLineV2 + msgHeaders), responseResultV2)
   t.deepEqual(httpHeaders(new Buffer(requestLine + msgHeaders)), requestResult)
   t.deepEqual(httpHeaders(new Buffer(statusLine + msgHeaders)), responseResult)
   t.deepEqual(httpHeaders(requestLine + msgHeaders, true), headerResult)
   t.deepEqual(httpHeaders(statusLine + msgHeaders, true), headerResult)
   t.deepEqual(httpHeaders(new Buffer(requestLine + msgHeaders), true), headerResult)
+  
   t.deepEqual(httpHeaders(new Buffer(statusLine + msgHeaders), true), headerResult)
   t.end()
 })
@@ -83,7 +94,7 @@ test('request-line only', function (t) {
   var requestResult = {
     method: 'GET',
     url: '/foo',
-    version: { major: 1, minor: 1 },
+    version: '1.1',
     headers: {}
   }
 
@@ -96,7 +107,7 @@ test('request-line only', function (t) {
 
 test('status-line only', function (t) {
   var responseResult = {
-    version: { major: 1, minor: 1 },
+    version: '1.1',
     statusCode: 200,
     statusMessage: 'OK',
     headers: {}
@@ -109,13 +120,31 @@ test('status-line only', function (t) {
   t.end()
 })
 
+test('status-line only (HTTP/2)', function (t) {
+  var responseResult = {
+    version: '2',
+    statusCode: 200,
+    statusMessage: '',
+    headers: {}
+  }
+
+  t.deepEqual(httpHeaders(statusLineV2 + '\r\n'), responseResult)
+  t.deepEqual(httpHeaders(new Buffer(statusLineV2 + '\r\n')), responseResult)
+  t.deepEqual(httpHeaders(statusLineV2 + '\r\n', true), {})
+  t.deepEqual(httpHeaders(new Buffer(statusLineV2 + '\r\n'), true), {})
+  t.end()
+})
+
+
 test('headers only', function (t) {
+  console.log('checking', msgHeaders)
   t.deepEqual(httpHeaders(msgHeaders), headerResult)
   t.deepEqual(httpHeaders(new Buffer(msgHeaders)), headerResult)
   t.deepEqual(httpHeaders(msgHeaders, true), headerResult)
   t.deepEqual(httpHeaders(new Buffer(msgHeaders), true), headerResult)
   t.end()
 })
+
 
 test('full http response', function (t) {
   t.deepEqual(httpHeaders(requestMsg), requestResult)
@@ -128,6 +157,7 @@ test('full http response', function (t) {
   t.deepEqual(httpHeaders(new Buffer(responseMsg), true), headerResult)
   t.end()
 })
+
 
 test('http.ServerResponse', function (t) {
   t.test('real http.ServerResponse object', function (t) {
@@ -155,6 +185,7 @@ test('http.ServerResponse', function (t) {
     t.end()
   })
 })
+
 
 test('set-cookie', function (t) {
   t.deepEqual(httpHeaders('Set-Cookie: foo'), { 'set-cookie': ['foo'] })
