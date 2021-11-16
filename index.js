@@ -5,9 +5,9 @@ var nextLine = require('next-line')
 // RFC-2068 Start-Line definitions:
 //   Request-Line: Method SP Request-URI SP HTTP-Version CRLF
 //   Status-Line:  HTTP-Version SP Status-Code SP Reason-Phrase CRLF
-var startLine = /^[A-Z_]+(\/\d\.\d)? /
-var requestLine = /^([A-Z_]+) (.+) [A-Z]+\/(\d)\.(\d)$/
-var statusLine = /^[A-Z]+\/(\d)\.(\d) (\d{3}) (.*)$/
+var startLine = /^[A-Z_]+(\/\d)?/
+var requestLine = /^([A-Z_]+) (.+) HTTP\/([12](\.(\d))?)$/
+var statusLine = /^HTTP\/([12](\.(\d))?) (\d{3})\s?(.*)?$/
 
 module.exports = function (data, onlyHeaders) {
   return parse(normalize(data), onlyHeaders)
@@ -17,20 +17,25 @@ function parse (str, onlyHeaders) {
   var line = firstLine(str)
   var match
 
+  //console.log('line', line + '#');
+  console.log('line.match(startLine)', startLine.test(line))
+  //console.log('line.match(statusLine)', line.match(statusLine))
+
+
   if (onlyHeaders && startLine.test(line)) {
     return parseHeaders(str)
   } else if ((match = line.match(requestLine)) !== null) {
     return {
       method: match[1],
       url: match[2],
-      version: { major: parseInt(match[3], 10), minor: parseInt(match[4], 10) },
+      version: match[3],
       headers: parseHeaders(str)
     }
   } else if ((match = line.match(statusLine)) !== null) {
     return {
-      version: { major: parseInt(match[1], 10), minor: parseInt(match[2], 10) },
-      statusCode: parseInt(match[3], 10),
-      statusMessage: match[4],
+      version: match[1],//{ major: parseInt(match[1], 10), minor: parseInt(match[2], 10) },
+      statusCode: parseInt(match[4], 10),
+      statusMessage: match[5] ?? '',
       headers: parseHeaders(str)
     }
   } else {
