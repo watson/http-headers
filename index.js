@@ -17,11 +17,6 @@ function parse (str, onlyHeaders) {
   var line = firstLine(str)
   var match
 
-  //console.log('line', line + '#');
-  console.log('line.match(startLine)', startLine.test(line))
-  //console.log('line.match(statusLine)', line.match(statusLine))
-
-
   if (onlyHeaders && startLine.test(line)) {
     return parseHeaders(str)
   } else if ((match = line.match(requestLine)) !== null) {
@@ -33,7 +28,7 @@ function parse (str, onlyHeaders) {
     }
   } else if ((match = line.match(statusLine)) !== null) {
     return {
-      version: match[1],//{ major: parseInt(match[1], 10), minor: parseInt(match[2], 10) },
+      version: match[1],
       statusCode: parseInt(match[4], 10),
       statusMessage: match[5] ?? '',
       headers: parseHeaders(str)
