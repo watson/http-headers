@@ -85,7 +85,7 @@ test('start-line + header', function (t) {
   t.deepEqual(httpHeaders(requestLine + msgHeaders, true), headerResult)
   t.deepEqual(httpHeaders(statusLine + msgHeaders, true), headerResult)
   t.deepEqual(httpHeaders(new Buffer(requestLine + msgHeaders), true), headerResult)
-  console.log('checking', statusLine + msgHeaders)
+  
   t.deepEqual(httpHeaders(new Buffer(statusLine + msgHeaders), true), headerResult)
   t.end()
 })
@@ -139,13 +139,12 @@ test('status-line only (HTTP/2)', function (t) {
 test('headers only', function (t) {
   console.log('checking', msgHeaders)
   t.deepEqual(httpHeaders(msgHeaders), headerResult)
-  /*t.deepEqual(httpHeaders(new Buffer(msgHeaders)), headerResult)
+  t.deepEqual(httpHeaders(new Buffer(msgHeaders)), headerResult)
   t.deepEqual(httpHeaders(msgHeaders, true), headerResult)
-  t.deepEqual(httpHeaders(new Buffer(msgHeaders), true), headerResult)*/
+  t.deepEqual(httpHeaders(new Buffer(msgHeaders), true), headerResult)
   t.end()
 })
 
-return;
 
 test('full http response', function (t) {
   t.deepEqual(httpHeaders(requestMsg), requestResult)
@@ -158,6 +157,7 @@ test('full http response', function (t) {
   t.deepEqual(httpHeaders(new Buffer(responseMsg), true), headerResult)
   t.end()
 })
+
 
 test('http.ServerResponse', function (t) {
   t.test('real http.ServerResponse object', function (t) {
@@ -185,6 +185,7 @@ test('http.ServerResponse', function (t) {
     t.end()
   })
 })
+
 
 test('set-cookie', function (t) {
   t.deepEqual(httpHeaders('Set-Cookie: foo'), { 'set-cookie': ['foo'] })
